@@ -25,7 +25,21 @@ internal class BankAccount
     
 
     private readonly List<Transaction> _allTransactions = new();
+    public string GetAccountHistory()
+    {
+        StringBuilder report = new StringBuilder();
+        decimal balance = 0;
+        report.AppendLine("Data\t\tAmount\tBalance\tNote");
+        foreach (var item in _allTransactions)
+        {
+            balance += item.Amount;
+            report.AppendLine($"" + $"{item.Date.ToShortDateString()}\t" +
+                              $"{item.Amount}\t{balance}\t{item.Date}");
+            
+        }
 
+        return report.ToString();
+    }
     public BankAccount(string name, decimal initialBalance)
     {
        
