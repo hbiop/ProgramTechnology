@@ -3,7 +3,7 @@ using System.Transactions;
 
 namespace Bank;
 
-internal class BankAccount
+public class BankAccount
 {
     private static int s_accountNuberSeed = 1000000000;
     public string Number { get; }
@@ -22,7 +22,11 @@ internal class BankAccount
             return balance;
         } 
     }
-    
+
+    public override string ToString()
+    {
+        return $"Type : {GetType().Name}\tOwner {Owner}\tNumber of account {Number}\t Balance: {Balance}";
+    }
 
     private readonly List<Transaction> _allTransactions = new();
     public string GetAccountHistory()
@@ -75,5 +79,9 @@ internal class BankAccount
         _allTransactions.Add(withdrawal);
     }
 
+    public virtual void PerformMonthAndTransactions()
+    {
+        
+    }
 
 }
