@@ -2,6 +2,10 @@ using Bluda_V_Restorane.enums;
 
 namespace Bluda_V_Restorane.classes;
 
+
+/// <summary>
+/// Базовый класс для всех блюд в ресторане
+/// </summary>
 public abstract class Dish
 {
     private int _id;
