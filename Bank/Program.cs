@@ -27,7 +27,7 @@
             InterestEarningAccount acc = new InterestEarningAccount("ac", 100m);
             acc.MakeDeposit(2000, DateTime.UtcNow, ":)");
             acc.MakeWithdrawal(1000, DateTime.UtcNow, ":)");
-            acc.PerformMonthAndTransactions();
+            acc.PerformMonthEndTransactions();
             Console.WriteLine(acc.ToString());
         }
     }

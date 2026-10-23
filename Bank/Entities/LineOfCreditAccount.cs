@@ -30,5 +30,5 @@ internal class LineOfCreditAccount : BankAccount
     /// Проверяет выход за рамки доступного баланса и возвращает транзакцию штрафа в размере 20 единиц при овердрафте.
     /// </summary>
     protected override Transaction? CheckWithdrawalLimit(bool isOverdrawn)
-        => isOverdrawn ? new Transaction(-20, DateTime.UtcNow, "apply overdraft") : default;
+        => isOverdrawn ? new Transaction(-20, DateTime.UtcNow, "Apply overdraft fee") : null;
 }
