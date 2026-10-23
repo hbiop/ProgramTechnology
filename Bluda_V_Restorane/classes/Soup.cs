@@ -4,7 +4,7 @@ namespace Bluda_V_Restorane.classes;
 
 public class Soup : Dish, IServable
 {
-    public bool IsVegetarian { get; set; }
+    public bool IsVegetarian { get; init; }
 
     public bool IsLight => IsVegetarian;
 

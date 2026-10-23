@@ -4,7 +4,7 @@ namespace Bluda_V_Restorane.classes;
 
 public class Cake : Dish, IServable
 {
-    public int Layers { get; set; }
+    public int Layers { get; init; }
 
     public bool IsBigCake => Layers >= 3;
 

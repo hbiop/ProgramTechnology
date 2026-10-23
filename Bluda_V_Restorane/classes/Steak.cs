@@ -4,7 +4,7 @@ namespace Bluda_V_Restorane.classes;
 
 public class Steak : Dish
 {
-    public Doneness Doneness { get; set; } = Doneness.Medium;
+    public Doneness Doneness { get; init; } = Doneness.Medium;
 
     public bool IsRare => Doneness == Doneness.Rare;
 
