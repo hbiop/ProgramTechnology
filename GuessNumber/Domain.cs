@@ -1,7 +1,15 @@
 namespace GuessNumber;
 
 /// <summary>Уровень сложности игры.</summary>
-public enum DifficultyLevel { Easy, Medium, Hard }
+public enum DifficultyLevel
+{
+    /// <summary>Диапазон 1–50.</summary>
+    Easy,
+    /// <summary>Диапазон 1–100.</summary>
+    Medium,
+    /// <summary>Диапазон 1–500.</summary>
+    Hard
+}
 
 /// <summary>Настройки новой игры.</summary>
 public sealed record GameSettings(DifficultyLevel Difficulty, int MaximumAttempts);
@@ -10,7 +18,17 @@ public sealed record GameSettings(DifficultyLevel Difficulty, int MaximumAttempt
 public sealed record NumberRange(int Minimum, int Maximum);
 
 /// <summary>Подсказка для игрока.</summary>
-public enum GuessHint { Higher, Lower, Correct, AttemptsExceeded }
+public enum GuessHint
+{
+    /// <summary>Нужно назвать число больше.</summary>
+    Higher,
+    /// <summary>Нужно назвать число меньше.</summary>
+    Lower,
+    /// <summary>Число угадано.</summary>
+    Correct,
+    /// <summary>Попытки закончились.</summary>
+    AttemptsExceeded
+}
 
 /// <summary>Событие хода игрока.</summary>
 public sealed class GuessResult : EventArgs

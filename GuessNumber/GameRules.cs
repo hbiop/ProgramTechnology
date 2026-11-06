@@ -3,6 +3,7 @@ namespace GuessNumber;
 /// <summary>Содержит правила уровней сложности.</summary>
 public sealed class GameRules : IGameRules
 {
+    /// <summary>Возвращает правила уровней сложности.</summary>
     /// <inheritdoc />
     public (NumberRange Range, int Attempts) Resolve(GameSettings settings) => settings.Difficulty switch
     {
