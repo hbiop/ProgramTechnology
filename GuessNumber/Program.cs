@@ -2,81 +2,76 @@ namespace GuessNumber;
 
 internal static class Program
 {
+    private const string StatisticsFile = "statistics.json";
+
     private static void Main()
     {
-        var rules = new GameRules();
-        var factory = new GuessingGameFactory(rules, new RandomNumberGenerator());
-        var settingsParser = new SettingsParser();
-        var statisticsService = new StatisticsService(new JsonStatisticsStore("statistics.json"));
+        IStatisticsStore store = new JsonStatisticsStore(StatisticsFile);
+        INumberGenerator generator = new RandomNumberGenerator();
 
         Console.WriteLine("=== Игра «Угадай число» ===");
-        Console.WriteLine("Статистика сохраняется в statistics.json.");
 
-        while (true)
+        do
         {
-            var settings = ReadSettings(settingsParser);
-            var game = factory.Create(settings);
-            var messages = new GameMessageSubscriber(Console.WriteLine);
-            messages.Subscribe(game);
+            var (minimum, maximum, attempts) = ReadDifficulty();
+            var game = new GuessingGame(minimum, maximum, attempts, generator);
 
-            var statistics = new StatisticsSubscriber(summary =>
+            game.GuessMade += (_, e) => Console.WriteLine(e.Hint switch
             {
-                var updated = statisticsService.Register(summary);
-                Console.WriteLine($"Игр: {updated.GamesPlayed}; побед: {updated.GamesWon}; лучший результат: {updated.BestScore}.");
+                GuessHint.Higher => $"Загаданное число больше. Осталось попыток: {e.AttemptsRemaining}",
+                GuessHint.Lower => $"Загаданное число меньше. Осталось попыток: {e.AttemptsRemaining}",
+                _ => "Поздравляем, вы угадали!"
             });
-            statistics.Subscribe(game);
+            game.GameFinished += (_, e) =>
+            {
+                if (!e.Won)
+                    Console.WriteLine($"Попытки закончились. Загаданное число: {e.SecretNumber}.");
+                store.Save(store.Load().WithGame(e.Won));
+            };
 
             PlayRound(game);
-            Console.Write("Сыграть ещё раз? (y/n): ");
-            if (!string.Equals(Console.ReadLine()?.Trim(), "y", StringComparison.OrdinalIgnoreCase))
-                break;
-        }
+        } while (AskToPlayAgain());
 
-        var finalStatistics = statisticsService.GetCurrent();
-        Console.WriteLine($"Итог: {finalStatistics.GamesPlayed} игр, {finalStatistics.GamesWon} побед.");
+        var statistics = store.Load();
+        Console.WriteLine($"Статистика: игр — {statistics.GamesPlayed}, побед — {statistics.GamesWon}.");
     }
 
-    private static GameSettings ReadSettings(SettingsParser parser)
+    private static (int Minimum, int Maximum, int Attempts) ReadDifficulty()
     {
         while (true)
         {
             Console.Write("Сложность (easy/medium/hard): ");
-            var difficulty = Console.ReadLine() ?? string.Empty;
-            Console.Write("Количество попыток (0 — по умолчанию): ");
-            var attemptsText = Console.ReadLine();
+            var level = Console.ReadLine()?.Trim().ToLowerInvariant();
+            var difficulty = level switch
+            {
+                "easy" => (Minimum: 1, Maximum: 50, Attempts: 10),
+                "medium" => (Minimum: 1, Maximum: 100, Attempts: 7),
+                "hard" => (Minimum: 1, Maximum: 500, Attempts: 5),
+                _ => default
+            };
 
-            if (int.TryParse(attemptsText, out var attempts))
-            {
-                try
-                {
-                    return parser.Parse(difficulty, attempts);
-                }
-                catch (ArgumentException exception)
-                {
-                    Console.WriteLine($"Ошибка настроек: {exception.Message}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Количество попыток должно быть целым числом.");
-            }
+            if (difficulty != default)
+                return difficulty;
+
+            Console.WriteLine("Введите easy, medium или hard.");
         }
     }
 
     private static void PlayRound(GuessingGame game)
     {
-        while (true)
+        while (!game.IsFinished)
         {
             Console.Write("Ваш вариант: ");
-            if (!int.TryParse(Console.ReadLine(), out var guess))
-            {
+            if (int.TryParse(Console.ReadLine(), out var guess))
+                game.Guess(guess);
+            else
                 Console.WriteLine("Введите целое число.");
-                continue;
-            }
-
-            var result = game.Guess(guess);
-            if (result.Hint is GuessHint.Correct or GuessHint.AttemptsExceeded)
-                return;
         }
+    }
+
+    private static bool AskToPlayAgain()
+    {
+        Console.Write("Сыграть ещё раз? (y/n): ");
+        return string.Equals(Console.ReadLine()?.Trim(), "y", StringComparison.OrdinalIgnoreCase);
     }
 }
