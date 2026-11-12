@@ -87,7 +87,7 @@ public sealed class GameApplication
 
         game.GuessMade -= OnGuessMade;
         _statistics.RecordGame(game.IsWon, game.Attempts);
-        SaveStatistics(_statisticsFilePath, false);
+        SaveStatistics(_statisticsFilePath);
 
         if (game.IsWon)
         {
@@ -232,12 +232,11 @@ public sealed class GameApplication
         }
     }
 
-    private void SaveStatistics(string path, bool showMessage)
+    private void SaveStatistics(string path)
     {
         try
         {
             new JsonStatisticsStore(path).Save(_statistics);
-            if (showMessage) _ui.WriteLine("Статистика сохранена.");
         }
         catch (IOException exception)
         {
