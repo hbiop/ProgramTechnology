@@ -1,10 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessNumberGame.Core", "GuessNumberGame.Core\GuessNumberGame.Core.csproj", "{D06E4235-BDFD-41AB-B4E8-B2073F46F21E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuessTheNumber.View", "GuessTheNumber.View\GuessTheNumber.View.csproj", "{1EE6DD08-CAEC-493A-82F5-7F2282AF9F28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D06E4235-BDFD-41AB-B4E8-B2073F46F21E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06E4235-BDFD-41AB-B4E8-B2073F46F21E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06E4235-BDFD-41AB-B4E8-B2073F46F21E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06E4235-BDFD-41AB-B4E8-B2073F46F21E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EE6DD08-CAEC-493A-82F5-7F2282AF9F28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EE6DD08-CAEC-493A-82F5-7F2282AF9F28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EE6DD08-CAEC-493A-82F5-7F2282AF9F28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EE6DD08-CAEC-493A-82F5-7F2282AF9F28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
