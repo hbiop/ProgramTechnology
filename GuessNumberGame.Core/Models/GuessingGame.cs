@@ -1,3 +1,4 @@
+using GuessNumberGame.Domain.Events;
 using GuessNumberGame.Domain.RandomNumberGenerator;
 
 namespace GuessNumberGame.Domain.Models;
@@ -37,6 +38,8 @@ public sealed class GuessingGame
 
     public int? RevealedSecret => IsFinished ? _secret : null;
 
+    public event EventHandler<GuessMadeEventArgs>? GuessMade;
+
     public GuessOutcome MakeGuess(int number)
     {
         if (IsFinished)
@@ -46,7 +49,9 @@ public sealed class GuessingGame
 
         if (number < MinNumber || number > MaxNumber)
         {
-            return GuessOutcome.OutOfRange;
+            var outOfRange = GuessOutcome.OutOfRange;
+            GuessMade?.Invoke(this, new GuessMadeEventArgs(number, outOfRange, Attempts));
+            return outOfRange;
         }
 
         Attempts++;
@@ -54,9 +59,13 @@ public sealed class GuessingGame
         if (number == _secret)
         {
             IsWon = true;
-            return GuessOutcome.Correct;
+            var correct = GuessOutcome.Correct;
+            GuessMade?.Invoke(this, new GuessMadeEventArgs(number, correct, Attempts));
+            return correct;
         }
 
-        return number < _secret ? GuessOutcome.TooLow : GuessOutcome.TooHigh;
+        var hint = number < _secret ? GuessOutcome.TooLow : GuessOutcome.TooHigh;
+        GuessMade?.Invoke(this, new GuessMadeEventArgs(number, hint, Attempts));
+        return hint;
     }
 }

@@ -33,7 +33,12 @@ public sealed class GameSettings
     {
         var errors = new List<string>();
 
-        if (MaxNumber - MinNumber < 1)
+        if (MinNumber < 1)
+        {
+            errors.Add("Минимальное число должно быть не меньше 1.");
+        }
+
+        if (MaxNumber <= MinNumber)
         {
             errors.Add("Максимальное число должно быть больше минимального.");
         }
